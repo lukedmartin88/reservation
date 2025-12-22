@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Agreement Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+        }
+        .document-font {
+            font-family: 'Noto Serif', serif;
+        }
+        
+        /* A4 Paper Simulation on Screen */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            color: black;
+        }
+
+        /* Print Styles - Critical for PDF Generation */
+        @media print {
+            body {
+                background: white;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .a4-page {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+                border: none;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            /* Ensure inputs look like text in print if we used them, but we are using spans */
+            input, textarea {
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col overflow-hidden">
+
+    <!-- Header (No Print) -->
+    <header class="bg-slate-800 text-white p-4 flex justify-between items-center shadow-md no-print z-10">
+        <h1 class="text-xl font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Reservation Agreement Generator
+        </h1>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded shadow transition font-bold flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+            </svg>
+            Print / Save as PDF
+        </button>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar Form (No Print) -->
+        <aside class="w-1/3 bg-white border-r border-gray-200 overflow-y-auto p-6 no-print shadow-inner z-0">
+            <h2 class="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Enter Details</h2>
+            <form id="detailsForm" class="space-y-6">
+                
+                <!-- Section 1: Vendor -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">1. Vendor & Agent Details</h3>
+                    
+                    <div class="bg-blue-50 p-2 rounded border border-blue-100">
+                        <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">Vendor (Developer)</label>
+                        <input type="text" data-bind="vendorName" placeholder="Organisation Name" class="w-full border rounded p-2 text-sm mb-1" value="Dynamik Construction Services Ltd">
+                        <textarea data-bind="vendorAddress" placeholder="Vendor Address" rows="3" class="w-full border rounded p-2 text-sm mb-1">14, Village Way East Rayners Lane, Harrow, London HA2 7LU</textarea>
+                        <input type="text" data-bind="vendorPhone" placeholder="Phone Number" class="w-full border rounded p-2 text-sm mb-1" value="+44 208 144 5553">
+                        <input type="text" data-bind="vendorEmail" placeholder="Email" class="w-full border rounded p-2 text-sm" value="build@dynamikconstruction.com">
+                    </div>
+
+                    <div class="bg-green-50 p-2 rounded border border-green-100">
+                        <label class="text-xs font-bold text-green-800 uppercase mb-1 block">Selling Agent</label>
+                        <input type="text" data-bind="agentName" placeholder="Agent Name" class="w-full border rounded p-2 text-sm mb-1" value="Arlington Park East Ltd">
+                        <textarea data-bind="agentAddress" placeholder="Agent Address" rows="3" class="w-full border rounded p-2 text-sm mb-1">25a Earlham Road, Norwich, NR2 3AD</textarea>
+                        <input type="text" data-bind="agentPhone" placeholder="Agent Phone" class="w-full border rounded p-2 text-sm mb-1" value="01603 577255">
+                        <input type="text" data-bind="agentEmail" placeholder="Agent Email" class="w-full border rounded p-2 text-sm" value="youragent@arlingtonpark.co.uk">
+                    </div>
+                </div>
+
+                <!-- Section 2: Plot Details -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">2. Plot & Property</h3>
+                    <input type="text" data-bind="devName" placeholder="Development Name" class="w-full border rounded p-2 text-sm" value="Norwich Oasis">
+                    <div class="flex gap-2">
+                        <input type="text" data-bind="plotNo" placeholder="Plot No" class="w-1/3 border rounded p-2 text-sm">
+                        <input type="text" data-bind="houseType" placeholder="Dwelling Type" class="w-2/3 border rounded p-2 text-sm">
+                    </div>
+                    <textarea data-bind="plotAddress" placeholder="Plot Address" rows="2" class="w-full border rounded p-2 text-sm">Dereham Road, Norwich, Norfolk, NR2 3TL</textarea>
+                    <input type="text" data-bind="garageDetails" placeholder="Garage/Parking Details" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="constructionStage" placeholder="Stage of Construction" class="w-full border rounded p-2 text-sm">
+                </div>
+
+                <!-- Section 3: Pricing & Dates -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">3. Pricing & Dates</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" data-bind="purchasePrice" placeholder="Purchase Price (£)" class="border rounded p-2 text-sm">
+                        <input type="text" data-bind="resFee" placeholder="Reservation Fee (£)" class="border rounded p-2 text-sm" value="1500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs text-gray-500">Res. Date</label>
+                            <input type="date" data-bind="resDate" class="w-full border rounded p-2 text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Valid Until</label>
+                            <input type="date" data-bind="validDate" class="w-full border rounded p-2 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Exchange Deadline</label>
+                        <input type="date" data-bind="exchangeDate" class="w-full border rounded p-2 text-sm">
+                    </div>
+                    <input type="text" data-bind="completionEst" placeholder="Anticipated Completion (e.g. Spring 2025)" class="w-full border rounded p-2 text-sm">
+                </div>
+
+                <!-- Section 4: Tenure & Retention -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">4. Tenure & Costs</h3>
+                    <select data-bind="tenureType" class="w-full border rounded p-2 text-sm">
+                        <option value="Freehold">Freehold</option>
+                        <option value="Leasehold">Leasehold</option>
+                    </select>
+                    <input type="text" data-bind="leaseTerms" placeholder="Lease Terms (Years/Start Date)" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="mgmtFee" placeholder="Est. Mgmt Fee (£)" class="w-full border rounded p-2 text-sm">
+                    <div class="flex gap-2">
+                        <input type="text" data-bind="retentionMin" placeholder="Retain Min (£)" class="w-1/2 border rounded p-2 text-sm">
+                        <input type="text" data-bind="retentionMax" placeholder="Retain Max (£)" class="w-1/2 border rounded p-2 text-sm">
+                    </div>
+                </div>
+
+                <!-- Section 5: Buyer Details -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">5. Buyer Details</h3>
+                    <h4 class="text-sm font-bold text-gray-600">Buyer 1</h4>
+                    <input type="text" data-bind="buyer1Name" placeholder="Name" class="w-full border rounded p-2 text-sm">
+                    <textarea data-bind="buyer1Address" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm"></textarea>
+                    
+                    <h4 class="text-sm font-bold text-gray-600 mt-2">Buyer 2</h4>
+                    <input type="text" data-bind="buyer2Name" placeholder="Name" class="w-full border rounded p-2 text-sm">
+                    <textarea data-bind="buyer2Address" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm"></textarea>
+                </div>
+
+                 <!-- Section 6: Advisors -->
+                 <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">6. Advisors</h3>
+                    <input type="text" data-bind="buyerSolicitor" placeholder="Buyer's Solicitor Firm" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="mortgageProvider" placeholder="Mortgage Provider" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="warrantyProvider" placeholder="Warranty Provider (e.g. NHBC)" class="w-full border rounded p-2 text-sm">
+                </div>
+            </form>
+            <div class="mt-8 text-xs text-gray-400">
+                Generated based on Consumer Code for Home Builders guidelines.
+            </div>
+        </aside>
+
+        <!-- Document Preview (Scrollable) -->
+        <main class="flex-1 bg-gray-500 overflow-y-auto p-8 flex justify-center">
+            
+            <div id="printArea">
+                <!-- PAGE 1 -->
+                <div class="a4-page document-font relative text-sm leading-relaxed">
+                    
+                    <!-- Header -->
+                    <div class="text-center border-b-2 border-black pb-4 mb-6">
+                        <h1 class="text-2xl font-bold uppercase tracking-wider">Reservation Agreement</h1>
+                        <p class="italic font-bold mt-2">Subject to Contract / Missives being concluded</p>
+                    </div>
+
+                    <div class="mb-6 flex justify-between">
+                        <div><strong>Date:</strong> <span class="resDate-text">[Date]</span></div>
+                    </div>
+
+                    <!-- 1. Vendor & Agent -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">1. Vendor & Selling Agent</h2>
+                        <div class="grid grid-cols-2 gap-8">
+                            <!-- Vendor Column -->
+                            <div class="pr-2 border-r border-gray-200">
+                                <p class="text-xs font-bold uppercase text-gray-500 mb-1">Vendor (Developer)</p>
+                                <p><strong>Name:</strong> <span class="vendorName-text">[Vendor Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="vendorAddress-text whitespace-pre-line">[Vendor Address]</span></p>
+                                <p><strong>Tel:</strong> <span class="vendorPhone-text">[Phone]</span></p>
+                                <p><strong>Email:</strong> <span class="vendorEmail-text">[Email]</span></p>
+                            </div>
+                            <!-- Agent Column -->
+                            <div>
+                                <p class="text-xs font-bold uppercase text-gray-500 mb-1">Selling Agent</p>
+                                <p><strong>Name:</strong> <span class="agentName-text">[Agent Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="agentAddress-text whitespace-pre-line">[Agent Address]</span></p>
+                                <p><strong>Tel:</strong> <span class="agentPhone-text">[Phone]</span></p>
+                                <p><strong>Email:</strong> <span class="agentEmail-text">[Email]</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Plot Details -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">2. Plot & Reservation Details</h2>
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-2">
+                            <p><strong>Development:</strong> <span class="devName-text">[Dev Name]</span></p>
+                            <p><strong>Plot No:</strong> <span class="plotNo-text">[No]</span></p>
+                            <p class="col-span-2"><strong>Address:</strong> <span class="plotAddress-text">[Address]</span></p>
+                            <p><strong>Dwelling Type:</strong> <span class="houseType-text">[Type]</span></p>
+                            <p><strong>Garage/Parking:</strong> <span class="garageDetails-text">[Details]</span></p>
+                            <p><strong>Stage:</strong> <span class="constructionStage-text">[Stage]</span></p>
+                        </div>
+                        
+                        <div class="mt-4 bg-gray-50 p-2 border border-gray-200">
+                            <h3 class="font-bold underline mb-1">Pricing & Dates</h3>
+                            <div class="grid grid-cols-2 gap-x-8 gap-y-1">
+                                <p><strong>Purchase Price:</strong> £<span class="purchasePrice-text">0.00</span></p>
+                                <p><strong>Price Valid Until:</strong> <span class="validDate-text">[Date]</span></p>
+                                <p><strong>Reservation Fee:</strong> £<span class="resFee-text">0.00</span></p>
+                                <p><strong>Reservation Date:</strong> <span class="resDate-text">[Date]</span></p>
+                                <p><strong>Valid Until:</strong> <span class="validDate-text">[Date]</span></p>
+                                <p><strong>Exchange Deadline:</strong> <span class="exchangeDate-text">[Date]</span></p>
+                                <p><strong>Anticipated Completion:</strong> <span class="completionEst-text">[Date]</span></p>
+                            </div>
+                            <div class="mt-2 text-xs border-t border-gray-300 pt-1">
+                                <p class="font-bold text-gray-700">Fee Protection:</p>
+                                <p class="italic">The Reservation Fee is held by <span class="agentName-text font-bold">...</span> in their Client Account protected by <strong>Propertymark CMP</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="font-bold underline mb-1">Tenure</h3>
+                            <p><strong>Type:</strong> <span class="tenureType-text">[Type]</span></p>
+                            <p><strong>Lease Terms:</strong> <span class="leaseTerms-text">[Terms]</span></p>
+                            <p><strong>Est. Management Fee:</strong> £<span class="mgmtFee-text">0.00</span> per annum</p>
+                            <p class="mt-2 text-xs italic border-l-2 border-black pl-2">
+                                If the reservation is cancelled after 14 calendar days, the possible cost retention (administrative costs deducted from refund) will be between £<span class="retentionMin-text">...</span> and £<span class="retentionMax-text">...</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Buyer Details -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">3. Buyer Details</h2>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-bold text-sm underline">Buyer 1</h3>
+                                <p><strong>Name:</strong> <span class="buyer1Name-text">[Name]</span></p>
+                                <p><strong>Address:</strong> <span class="buyer1Address-text whitespace-pre-line">[Address]</span></p>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm underline">Buyer 2</h3>
+                                <p><strong>Name:</strong> <span class="buyer2Name-text">[Name]</span></p>
+                                <p><strong>Address:</strong> <span class="buyer2Address-text whitespace-pre-line">[Address]</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Advisors -->
+                    <div class="mb-4">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">4. Professional Advisors</h2>
+                        <div class="grid grid-cols-2 gap-y-2">
+                            <p><strong>Buyer's Solicitor:</strong> <span class="buyerSolicitor-text">[Details]</span></p>
+                            <p><strong>Mortgage Provider:</strong> <span class="mortgageProvider-text">[Details]</span></p>
+                            <p><strong>Warranty Provider:</strong> <span class="warrantyProvider-text">[Details]</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="h-8 print:hidden"></div> <!-- Spacer for screen -->
+
+                <!-- PAGE 2 (Force break in print) -->
+                <div class="a4-page document-font relative text-sm leading-relaxed page-break">
+                    
+                    <!-- 5. Conditions -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-4 uppercase">5. Conditions Relating to this Reservation</h2>
+                        <ol class="list-decimal list-outside pl-5 space-y-2 text-justify">
+                            <li><strong>Reservation Period:</strong> In return for the Buyer paying the Reservation Fee, the Vendor agrees to reserve the Property at the Purchase Price until the Reservation Expiry Date.</li>
+                            <li><strong>Right to Cancel (Major Change):</strong> The Buyer has the right to cancel the reservation at any time, including as a result of a major change to the Home which has not been agreed. The Buyer can do this by contacting the Selling Agent in writing.</li>
+                            <li><strong>Cooling-off Period:</strong> The Buyer has a <strong>14 calendar day</strong> Cooling-off period from the date of this agreement, during which they can cancel the Reservation Agreement and receive a full refund of the Reservation Fee.</li>
+                            <li><strong>Cancellation After Cooling-off:</strong> If the Buyer cancels the reservation after the Cooling-off period, the Vendor/Agent agrees to pay back the Reservation Fee less any reasonable administrative and other costs incurred in processing and holding the reservation. The range of such deductions will be between £<span class="retentionMin-text font-bold">...</span> and £<span class="retentionMax-text font-bold">...</span>.</li>
+                            <li><strong>Deposit Deduction:</strong> The Reservation Fee will be deducted as part payment of the deposit due on Exchange of Contracts (or when concluding Missives in Scotland).</li>
+                            <li><strong>Spoken Statements:</strong> Prior to Exchange of Contracts / conclusion of Missives, the Buyer can include in the Contract of Sale any spoken statements, if any, they are placing material reliance upon by informing their solicitor.</li>
+                            <li><strong>Changes to the Home:</strong> The Buyer is able to administer changes to the Home (such as paint colour, design, or specification changes) subject to the stage of construction and Vendor agreement.</li>
+                            <li><strong>Buyer Costs:</strong> The Buyer is responsible for all costs and expenses incurred by them in the purchase of the property, unless otherwise set out in the Reservation Agreement.</li>
+                            <li><strong>Data Protection:</strong> The Buyer consents to the Reservation Agreement information being used by the Vendor and Selling Agent to progress the purchase, and for use in customer surveys under the Consumer Code for Home Builders. All such information will be applied in accordance with the Data Protection Act 2018.</li>
+                        </ol>
+                    </div>
+
+                    <!-- 6. Declarations -->
+                    <div class="mb-8 bg-gray-50 border border-gray-200 p-4">
+                        <h2 class="text-base font-bold uppercase mb-2">6. Declarations</h2>
+                        <ul class="list-disc pl-5 space-y-1 mb-6">
+                            <li>We have read, understood, and accept the conditions detailed on this Reservation Agreement.</li>
+                            <li>We have received/read the information and details listed in the Summary Checklist attached at Appendix 1.</li>
+                            <li>We confirm that we have received a copy of the Consumer Code Scheme.</li>
+                        </ul>
+
+                        <div class="grid grid-cols-2 gap-10 mt-8">
+                            <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Signed (Buyer 1)</p>
+                            </div>
+                            <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Date</p>
+                            </div>
+                            <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Signed (Buyer 2)</p>
+                            </div>
+                            <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Date</p>
+                            </div>
+                             <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Signed (Vendor / Agent Rep)</p>
+                            </div>
+                            <div>
+                                <div class="border-b border-black h-8 mb-1"></div>
+                                <p class="text-xs font-bold uppercase">Date</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs italic text-center text-gray-500">This is a legal agreement; if in any doubt as to its meaning or effect, the Buyer should seek legal advice before signing it.</p>
+                
+                    <div class="border-t-2 border-black mt-8 pt-4">
+                        <h2 class="text-base font-bold uppercase mb-4">Appendix 1: Information Pack Summary Checklist</h2>
+                        <p class="mb-4"><strong>Development:</strong> <span class="devName-text">[Name]</span> | <strong>Plot:</strong> <span class="plotNo-text">[No]</span></p>
+                        
+                        <table class="w-full text-xs border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 p-2 text-left w-12">Req.</th>
+                                    <th class="border border-gray-300 p-2 text-left">Information Supplied</th>
+                                    <th class="border border-gray-300 p-2 w-16 text-center">Initials</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">List of contents included in price (white goods, carpets, etc.)</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Standards the Home is built to (Building Regs, Warranty, Energy)</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Specification including main structural frame type</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Brochures/plans showing size, spec, layout, plot position</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Home Warranty cover explanation & contact details</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Details of services not immediately transferring (roads, drains)</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.5</td><td class="border p-2">Health and Safety precautions when visiting site</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Who to contact with questions (names/numbers)</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.1</td><td class="border p-2">Exceptional restrictions on using/living in the Home</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">5.2</td><td class="border p-2">Copy of Builder's Complaints Procedure</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">2.3</td><td class="border p-2">Advice to appoint a professional legal adviser</td><td class="border"></td></tr>
+                                <tr><td class="border p-2">3.1</td><td class="border p-2">Advice of Buyer's termination rights</td><td class="border"></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple data binding script
+        document.addEventListener('DOMContentLoaded', () => {
+            const formInputs = document.querySelectorAll('input[data-bind], textarea[data-bind], select[data-bind]');
+
+            function updatePreview(input) {
+                const key = input.getAttribute('data-bind');
+                const value = input.value;
+                const targets = document.querySelectorAll(`.${key}-text`);
+                
+                targets.forEach(target => {
+                    // Maintain placeholder if empty
+                    if (!value) {
+                        target.classList.add('text-gray-400');
+                        target.innerText = `[${key}]`;
+                    } else {
+                        target.classList.remove('text-gray-400');
+                        
+                        // Check if input is a date type for better formatting
+                        if (input.type === 'date') {
+                             // Create date object (Append time to ensure local date is respected)
+                             const dateObj = new Date(value + 'T12:00:00');
+                             if (!isNaN(dateObj.getTime())) {
+                                 // Format to UK English (e.g., 28 October 2025)
+                                 target.innerText = new Intl.DateTimeFormat('en-GB', { 
+                                     day: 'numeric', month: 'long', year: 'numeric' 
+                                 }).format(dateObj);
+                             } else {
+                                 target.innerText = value;
+                             }
+                        } else {
+                            target.innerText = value;
+                        }
+                    }
+                });
+            }
+
+            // Initialize listeners
+            formInputs.forEach(input => {
+                input.addEventListener('input', () => updatePreview(input));
+                updatePreview(input);
+            });
+
+            // ------------------------------------------------------------------
+            // LOGIC: Automatically Calculate Exchange Deadline (+6 Weeks)
+            // ------------------------------------------------------------------
+            const resDateInput = document.querySelector('input[data-bind="resDate"]');
+            const exchangeDateInput = document.querySelector('input[data-bind="exchangeDate"]');
+
+            if (resDateInput && exchangeDateInput) {
+                resDateInput.addEventListener('change', () => {
+                    if (resDateInput.value) {
+                        // Create date object from input (YYYY-MM-DD)
+                        // Append T12:00:00 to avoid timezone rolling the date back
+                        const startDate = new Date(resDateInput.value + 'T12:00:00');
+                        
+                        // Add 42 days (6 weeks)
+                        startDate.setDate(startDate.getDate() + 42);
+                        
+                        // Format back to YYYY-MM-DD for the input value
+                        const year = startDate.getFullYear();
+                        const month = String(startDate.getMonth() + 1).padStart(2, '0');
+                        const day = String(startDate.getDate()).padStart(2, '0');
+                        
+                        exchangeDateInput.value = `${year}-${month}-${day}`;
+                        
+                        // Trigger updatePreview for the calculated field
+                        exchangeDateInput.dispatchEvent(new Event('input'));
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
