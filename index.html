@@ -23,30 +23,7 @@
             background: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             color: black;
-            position: relative; /* Ensure absolute positioning works for footer */
-        }
-
-        /* Image Placeholder Styles */
-        .img-placeholder {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6;
-            border: 2px dashed #d1d5db;
-            color: #6b7280;
-            font-size: 0.6rem;
-            text-align: center;
-            cursor: pointer;
-            overflow: hidden;
-            transition: all 0.2s;
-        }
-        .img-placeholder:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
-            background-color: #eff6ff;
-        }
-        .hidden-input {
-            display: none;
+            position: relative;
         }
 
         /* Print Styles - Critical for PDF Generation */
@@ -88,7 +65,7 @@
                 box-shadow: none;
                 border: none;
                 min-height: 297mm; 
-                height: 297mm; /* Keep fixed height to ensure footer stays at bottom */
+                height: 297mm;
                 position: relative;
                 page-break-after: always;
             }
@@ -101,13 +78,6 @@
                 page-break-before: always;
             }
             
-            /* Hide placeholder styling in print if image is missing, just show empty */
-            .img-placeholder {
-                border: none;
-                background: transparent;
-                color: transparent;
-            }
-            /* Ensure inputs look like text in print if we used them, but we are using spans */
             input, textarea {
                 border: none;
             }
@@ -144,9 +114,291 @@
                 <div class="space-y-3">
                     <h3 class="font-semibold text-blue-800">1. Vendor & Agent Details</h3>
                     
-                    <!-- Lower Right Logo Page 1 -->
-                    <div class="absolute bottom-8 right-8 flex justify-end items-center">
-                         <img src="Propertymark%20CMP%20logo%20(White)%20(small%20use%20variant).png" class="h-10 object-contain" alt="Propertymark CMP">
+                    <div class="bg-blue-50 p-2 rounded border border-blue-100">
+                        <label class="text-xs font-bold text-blue-800 uppercase mb-1 block">Vendor (Developer)</label>
+                        <input type="text" data-bind="vendorName" placeholder="Organisation Name" class="w-full border rounded p-2 text-sm mb-1" value="Dynamik Construction Services Ltd">
+                        <textarea data-bind="vendorAddress" placeholder="Vendor Address" rows="3" class="w-full border rounded p-2 text-sm mb-1">14, Village Way East Rayners Lane, Harrow, London HA2 7LU</textarea>
+                        <input type="text" data-bind="vendorPhone" placeholder="Phone Number" class="w-full border rounded p-2 text-sm mb-1" value="+44 208 144 5553">
+                        <input type="text" data-bind="vendorEmail" placeholder="Email" class="w-full border rounded p-2 text-sm" value="build@dynamikconstruction.com">
+                    </div>
+
+                    <div class="bg-green-50 p-2 rounded border border-green-100">
+                        <label class="text-xs font-bold text-green-800 uppercase mb-1 block">Selling Agent</label>
+                        <input type="text" data-bind="agentName" placeholder="Agent Name" class="w-full border rounded p-2 text-sm mb-1" value="Arlington Park East Ltd">
+                        <textarea data-bind="agentAddress" placeholder="Agent Address" rows="3" class="w-full border rounded p-2 text-sm mb-1">25a Earlham Road, Norwich, NR2 3AD</textarea>
+                        <input type="text" data-bind="agentPhone" placeholder="Agent Phone" class="w-full border rounded p-2 text-sm mb-1" value="01603 577255">
+                        <input type="text" data-bind="agentEmail" placeholder="Agent Email" class="w-full border rounded p-2 text-sm" value="youragent@arlingtonpark.co.uk">
+                    </div>
+                </div>
+
+                <!-- Section 2: Plot Details -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">2. Plot & Property</h3>
+                    <input type="text" data-bind="devName" placeholder="Development Name" class="w-full border rounded p-2 text-sm" value="Norwich Oasis">
+                    <div class="flex gap-2">
+                        <input type="text" data-bind="plotNo" placeholder="Plot No" class="w-1/3 border rounded p-2 text-sm">
+                        <input type="text" data-bind="houseType" placeholder="Dwelling Type" class="w-2/3 border rounded p-2 text-sm">
+                    </div>
+                    <textarea data-bind="plotAddress" placeholder="Plot Address" rows="2" class="w-full border rounded p-2 text-sm">Dereham Road, Norwich, Norfolk, NR2 3TL</textarea>
+                    <input type="text" data-bind="garageDetails" placeholder="Garage/Parking Details" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="constructionStage" placeholder="Stage of Construction" class="w-full border rounded p-2 text-sm">
+                </div>
+
+                <!-- Section 3: Pricing & Dates -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">3. Pricing & Dates</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" data-bind="purchasePrice" placeholder="Purchase Price (£)" class="border rounded p-2 text-sm">
+                        <input type="text" data-bind="resFee" placeholder="Reservation Fee (£)" class="border rounded p-2 text-sm" value="1500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs text-gray-500">Res. Date</label>
+                            <input type="date" data-bind="resDate" class="w-full border rounded p-2 text-sm">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-500">Valid Until</label>
+                            <input type="date" data-bind="validDate" class="w-full border rounded p-2 text-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-500">Exchange Deadline</label>
+                        <input type="date" data-bind="exchangeDate" class="w-full border rounded p-2 text-sm">
+                    </div>
+                    <input type="text" data-bind="completionEst" placeholder="Anticipated Completion (e.g. Spring 2025)" class="w-full border rounded p-2 text-sm">
+                </div>
+
+                <!-- Section 4: Tenure & Retention -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">4. Tenure & Costs</h3>
+                    <select data-bind="tenureType" class="w-full border rounded p-2 text-sm">
+                        <option value="Freehold">Freehold</option>
+                        <option value="Leasehold">Leasehold</option>
+                    </select>
+                    <input type="text" data-bind="leaseTerms" placeholder="Lease Terms (Years/Start Date)" class="w-full border rounded p-2 text-sm">
+                    <input type="text" data-bind="mgmtFee" placeholder="Est. Mgmt Fee (£)" class="w-full border rounded p-2 text-sm">
+                    <div class="flex gap-2">
+                        <input type="text" data-bind="retentionMin" placeholder="Retain Min (£)" class="w-1/2 border rounded p-2 text-sm" value="50">
+                        <input type="text" data-bind="retentionMax" placeholder="Retain Max (£)" class="w-1/2 border rounded p-2 text-sm" value="1500">
+                    </div>
+                </div>
+
+                <!-- Section 5: Buyer Details -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">5. Buyer Details</h3>
+                    <h4 class="text-sm font-bold text-gray-600">Buyer 1</h4>
+                    <input type="text" data-bind="buyer1Name" placeholder="Name" class="w-full border rounded p-2 text-sm">
+                    <textarea data-bind="buyer1Address" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm"></textarea>
+                    
+                    <h4 class="text-sm font-bold text-gray-600 mt-2">Buyer 2</h4>
+                    <input type="text" data-bind="buyer2Name" placeholder="Name" class="w-full border rounded p-2 text-sm">
+                    <textarea data-bind="buyer2Address" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm"></textarea>
+                </div>
+
+                 <!-- Section 6: Advisors -->
+                 <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">6. Solicitors & Advisors</h3>
+                    
+                    <!-- Vendor Solicitor -->
+                    <div class="bg-gray-50 p-2 rounded border border-gray-200 mb-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase mb-1 block">Vendor's Solicitor</label>
+                        <input type="text" data-bind="vendorSolName" placeholder="Firm Name" class="w-full border rounded p-2 text-sm mb-1">
+                        <textarea data-bind="vendorSolAddress" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm mb-1"></textarea>
+                        <div class="grid grid-cols-2 gap-1">
+                            <input type="text" data-bind="vendorSolContact" placeholder="Contact Name" class="border rounded p-2 text-sm">
+                            <input type="text" data-bind="vendorSolPhone" placeholder="Phone" class="border rounded p-2 text-sm">
+                        </div>
+                        <input type="text" data-bind="vendorSolEmail" placeholder="Email" class="w-full border rounded p-2 text-sm mt-1">
+                    </div>
+
+                    <!-- Buyer Solicitor -->
+                    <div class="bg-gray-50 p-2 rounded border border-gray-200 mb-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase mb-1 block">Buyer's Solicitor</label>
+                        <input type="text" data-bind="buyerSolName" placeholder="Firm Name" class="w-full border rounded p-2 text-sm mb-1">
+                        <textarea data-bind="buyerSolAddress" placeholder="Address" rows="2" class="w-full border rounded p-2 text-sm mb-1"></textarea>
+                        <div class="grid grid-cols-2 gap-1">
+                            <input type="text" data-bind="buyerSolContact" placeholder="Contact Name" class="border rounded p-2 text-sm">
+                            <input type="text" data-bind="buyerSolPhone" placeholder="Phone" class="border rounded p-2 text-sm">
+                        </div>
+                         <input type="text" data-bind="buyerSolEmail" placeholder="Email" class="w-full border rounded p-2 text-sm mt-1">
+                    </div>
+
+                    <input type="text" data-bind="mortgageProvider" placeholder="Mortgage Provider" class="w-full border rounded p-2 text-sm">
+                    
+                    <!-- Warranty Provider -->
+                    <div class="bg-gray-50 p-2 rounded border border-gray-200 mt-2">
+                        <label class="text-xs font-bold text-gray-600 uppercase mb-1 block">Warranty Provider</label>
+                        <input type="text" data-bind="warrantyName" placeholder="Provider Name (e.g. NHBC)" class="w-full border rounded p-2 text-sm mb-1">
+                    </div>
+                </div>
+
+                <!-- Section 7: Chain & Dependencies -->
+                <div class="space-y-3">
+                    <h3 class="font-semibold text-blue-800">7. Chain & Dependencies</h3>
+                    <select data-bind="buyerPosition" class="w-full border rounded p-2 text-sm">
+                        <option value="">Select Buyer Position...</option>
+                        <option value="First Time Buyer / No Chain">First Time Buyer / No Chain</option>
+                        <option value="Subject to Sale (Sold STC)">Subject to Sale (Sold STC)</option>
+                        <option value="Subject to Sale (Not Yet Sold)">Subject to Sale (Not Yet Sold)</option>
+                        <option value="Cash Buyer">Cash Buyer</option>
+                        <option value="Investor">Investor</option>
+                        <option value="Part Exchange">Part Exchange</option>
+                    </select>
+                    <textarea data-bind="dependencyDetails" placeholder="Dependent Property Address & Agent Details" rows="3" class="w-full border rounded p-2 text-sm"></textarea>
+                </div>
+
+                 <!-- Section 8: Incentives -->
+                 <div class="space-y-3">
+                    <h3 class=" font-semibold text-blue-800">8. Incentives & Extras</h3>
+                    <textarea data-bind="incentives" placeholder="List incentives included in price (e.g. Carpets, Legal Fees, Stamp Duty)..." rows="3" class="w-full border rounded p-2 text-sm"></textarea>
+                </div>
+
+            </form>
+            <div class="mt-8 text-xs text-gray-400">
+                Generated for Arlington Park.
+            </div>
+        </aside>
+
+        <!-- Document Preview (Scrollable) -->
+        <main class="flex-1 bg-gray-500 overflow-y-auto p-8 flex justify-center">
+            
+            <div id="printArea">
+                <!-- PAGE 1 -->
+                <div class="a4-page document-font relative text-sm leading-relaxed">
+                    
+                    <!-- Header -->
+                    <div class="flex justify-between items-center border-b-2 border-gray-800 pb-4 mb-6">
+                        <!-- Branding / Logo Area -->
+                        <div class="flex items-center gap-6">
+                             <!-- Direct Image References -->
+                             <img src="Arlington-large.jpg" alt="Arlington Park" class="h-16 object-contain">
+                             <img src="DYNAMIK.png" alt="Dynamik Construction" class="h-10 object-contain">
+                             <img src="Propertymark%20CMP%20logo%20(White)%20(small%20use%20variant).png" alt="Propertymark CMP" class="h-10 object-contain">
+                        </div>
+
+                        <div class="text-right">
+                            <h1 class="text-xl font-bold uppercase tracking-wider">Reservation Agreement</h1>
+                            <p class="italic text-xs mt-1">Subject to Contract / Missives being concluded</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 flex justify-between">
+                        <div><strong>Date:</strong> <span class="resDate-text">[Date]</span></div>
+                    </div>
+
+                    <!-- 1. Vendor & Agent -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">1. Vendor & Selling Agent</h2>
+                        <div class="grid grid-cols-2 gap-8">
+                            <!-- Vendor Column -->
+                            <div class="pr-2 border-r border-gray-200">
+                                <p class="text-xs font-bold uppercase text-gray-500 mb-1">Vendor (Developer)</p>
+                                <p><strong>Name:</strong> <span class="vendorName-text">[Vendor Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="vendorAddress-text whitespace-pre-line">[Vendor Address]</span></p>
+                                <p><strong>Tel:</strong> <span class="vendorPhone-text">[Phone]</span></p>
+                                <p><strong>Email:</strong> <span class="vendorEmail-text">[Email]</span></p>
+                            </div>
+                            <!-- Agent Column -->
+                            <div>
+                                <p class="text-xs font-bold uppercase text-gray-500 mb-1">Selling Agent</p>
+                                <p><strong>Name:</strong> <span class="agentName-text">[Agent Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="agentAddress-text whitespace-pre-line">[Agent Address]</span></p>
+                                <p><strong>Tel:</strong> <span class="agentPhone-text">[Phone]</span></p>
+                                <p><strong>Email:</strong> <span class="agentEmail-text">[Email]</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Plot Details -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">2. Plot & Reservation Details</h2>
+                        <div class="grid grid-cols-2 gap-x-8 gap-y-2">
+                            <p><strong>Development:</strong> <span class="devName-text">[Dev Name]</span></p>
+                            <p><strong>Plot No:</strong> <span class="plotNo-text">[No]</span></p>
+                            <p class="col-span-2"><strong>Address:</strong> <span class="plotAddress-text">[Address]</span></p>
+                            <p><strong>Dwelling Type:</strong> <span class="houseType-text">[Type]</span></p>
+                            <p><strong>Garage/Parking:</strong> <span class="garageDetails-text">[Details]</span></p>
+                            <p><strong>Stage:</strong> <span class="constructionStage-text">[Stage]</span></p>
+                        </div>
+                        
+                        <div class="mt-4 bg-gray-50 p-2 border border-gray-200">
+                            <h3 class="font-bold underline mb-1">Pricing & Dates</h3>
+                            <div class="grid grid-cols-2 gap-x-8 gap-y-1">
+                                <p><strong>Purchase Price:</strong> £<span class="purchasePrice-text">0.00</span></p>
+                                <p><strong>Price Valid Until:</strong> <span class="validDate-text">[Date]</span></p>
+                                <p><strong>Reservation Fee:</strong> £<span class="resFee-text">0.00</span></p>
+                                <p><strong>Reservation Date:</strong> <span class="resDate-text">[Date]</span></p>
+                                <p><strong>Valid Until:</strong> <span class="validDate-text">[Date]</span></p>
+                                <p><strong>Exchange Deadline:</strong> <span class="exchangeDate-text">[Date]</span></p>
+                                <p><strong>Anticipated Completion:</strong> <span class="completionEst-text">[Date]</span></p>
+                            </div>
+                            <div class="mt-2 text-xs border-t border-gray-300 pt-1">
+                                <p class="font-bold text-gray-700">Fee Protection:</p>
+                                <p class="italic">The Reservation Fee is held by <span class="agentName-text font-bold">...</span> in their Client Account protected by <strong>Propertymark CMP (C0135071)</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h3 class="font-bold underline mb-1">Tenure</h3>
+                            <p><strong>Type:</strong> <span class="tenureType-text">[Type]</span></p>
+                            <p><strong>Lease Terms:</strong> <span class="leaseTerms-text">[Terms]</span></p>
+                            <p><strong>Est. Management Fee:</strong> £<span class="mgmtFee-text">0.00</span> per annum</p>
+                            <p class="mt-2 text-xs italic border-l-2 border-black pl-2">
+                                If the reservation is cancelled after 14 calendar days, the possible cost retention (administrative costs deducted from refund) will be between £<span class="retentionMin-text">...</span> and £<span class="retentionMax-text">...</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Buyer Details -->
+                    <div class="mb-6">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">3. Buyer Details</h2>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-bold text-sm underline">Buyer 1</h3>
+                                <p><strong>Name:</strong> <span class="buyer1Name-text">[Name]</span></p>
+                                <p><strong>Address:</strong> <span class="buyer1Address-text whitespace-pre-line">[Address]</span></p>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-sm underline">Buyer 2</h3>
+                                <p><strong>Name:</strong> <span class="buyer2Name-text">[Name]</span></p>
+                                <p><strong>Address:</strong> <span class="buyer2Address-text whitespace-pre-line">[Address]</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Advisors -->
+                    <div class="mb-4">
+                        <h2 class="text-base font-bold border-b border-gray-400 mb-2 uppercase">4. Professional Advisors</h2>
+                        
+                        <div class="grid grid-cols-2 gap-6 mb-4">
+                            <!-- Vendor Solicitor Col -->
+                            <div class="text-xs">
+                                <h3 class="font-bold text-sm underline mb-1">Vendor's Solicitor</h3>
+                                <p><strong>Firm:</strong> <span class="vendorSolName-text">[Firm Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="vendorSolAddress-text whitespace-pre-line">[Address]</span></p>
+                                <p><strong>Contact:</strong> <span class="vendorSolContact-text">[Name]</span></p>
+                                <p><strong>Email:</strong> <span class="vendorSolEmail-text">[Email]</span></p>
+                                <p><strong>Tel:</strong> <span class="vendorSolPhone-text">[Phone]</span></p>
+                            </div>
+                            
+                            <!-- Buyer Solicitor Col -->
+                            <div class="text-xs">
+                                <h3 class="font-bold text-sm underline mb-1">Buyer's Solicitor</h3>
+                                <p><strong>Firm:</strong> <span class="buyerSolName-text">[Firm Name]</span></p>
+                                <p><strong>Address:</strong><br><span class="buyerSolAddress-text whitespace-pre-line">[Address]</span></p>
+                                <p><strong>Contact:</strong> <span class="buyerSolContact-text">[Name]</span></p>
+                                <p><strong>Email:</strong> <span class="buyerSolEmail-text">[Email]</span></p>
+                                <p><strong>Tel:</strong> <span class="buyerSolPhone-text">[Phone]</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-y-2 border-t border-gray-200 pt-2">
+                            <p><strong>Mortgage Provider:</strong> <span class="mortgageProvider-text">[Details]</span></p>
+                            <div>
+                                <p><strong>Warranty Provider:</strong> <span class="warrantyName-text">[Name]</span></p>
+                                <p class="text-xs italic">10 year warranty underwritten by Accelerant Insurance UK</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -155,8 +407,8 @@
                 <!-- PAGE 2 (Force break in print) -->
                 <div class="a4-page document-font relative text-sm leading-relaxed page-break">
                     
-                    <!-- NEW SECTIONS: Chain & Incentives -->
-                    <div class="mb-6">
+                    <div class="mb-6 pt-6"> <!-- Added padding top since header was removed -->
+                        <!-- NEW SECTIONS: Chain & Incentives -->
                         <h2 class="text-base font-bold border-b border-gray-400 mb-4 uppercase">5. Chain Details & Incentives</h2>
                         
                         <div class="mb-4">
@@ -262,21 +514,6 @@
                     <div class="mt-6 border-2 border-black bg-gray-50 p-4 text-center">
                         <p class="font-bold text-sm uppercase">This is a legal agreement; if in any doubt as to its meaning or effect, the buyer should seek legal advice before signing it.</p>
                     </div>
-                
-                     <!-- Footer Logo Page 2 -->
-                    <div class="absolute bottom-8 left-0 w-full flex justify-center items-center opacity-70">
-                         <img src="Arlington-large.jpg" class="h-8" alt="Arlington Park">
-                    </div>
-
-                    <!-- Lower Left Logo Page 2 -->
-                    <div class="absolute bottom-8 left-8 flex justify-start items-center">
-                         <img src="DYNAMIK.png" class="h-10 object-contain" alt="Dynamik Construction">
-                    </div>
-                    
-                    <!-- Lower Right Logo Page 2 -->
-                    <div class="absolute bottom-8 right-8 flex justify-end items-center">
-                         <img src="Propertymark%20CMP%20logo%20(White)%20(small%20use%20variant).png" class="h-10 object-contain" alt="Propertymark CMP">
-                    </div>
                 </div>
 
                 <div class="h-8 print:hidden"></div> <!-- Spacer for screen -->
@@ -284,74 +521,61 @@
                 <!-- PAGE 3 (Force break in print) -->
                 <div class="a4-page document-font relative text-sm leading-relaxed page-break">
                     
-                    <div class="border-t-2 border-black mt-8 pt-4">
-                        <h2 class="text-base font-bold uppercase mb-4">Appendix 1: Information Pack Summary Checklist</h2>
-                        <p class="mb-4"><strong>Development:</strong> <span class="devName-text">[Name]</span> | <strong>Plot:</strong> <span class="plotNo-text">[No]</span></p>
-                        
-                        <p class="text-xs italic mb-2">By initialling below, the Buyer confirms receipt/explanation of the following:</p>
+                    <div class="pt-6"> <!-- Added padding top since header was removed -->
+                        <div class="border-t-2 border-black pt-4">
+                            <h2 class="text-base font-bold uppercase mb-4">Appendix 1: Information Pack Summary Checklist</h2>
+                            <p class="mb-4"><strong>Development:</strong> <span class="devName-text">[Name]</span> | <strong>Plot:</strong> <span class="plotNo-text">[No]</span></p>
+                            
+                            <p class="text-xs italic mb-2">By initialling below, the Buyer confirms receipt/explanation of the following:</p>
 
-                        <table class="w-full text-xs border-collapse border border-gray-300">
-                            <thead>
-                                <tr class="bg-gray-100">
-                                    <th class="border border-gray-300 p-2 text-left">Document / Information Provided</th>
-                                    <th class="border border-gray-300 p-2 w-20 text-center">Initials</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td class="border p-2"><strong>Reservation Agreement:</strong> Full terms, conditions, and expiry date explained.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Property Details:</strong> Site plan, plot boundary, and internal layout/floor plans.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Specification:</strong> List of fixtures, fittings, and contents included in the price.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Tenure & Costs:</strong> Tenure type (Freehold/Leasehold) and estimated management fees.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Warranty:</strong> Details of the Warranty Provider and scope of cover.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Health & Safety:</strong> Site safety rules and requirements for visiting the development.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Cancellation Rights:</strong> Explanation of the cooling-off period and retention costs.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Complaints Procedure:</strong> Copy of the Builder's/Agent's process for handling complaints.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Professional Advice:</strong> Recommendation to appoint a legal advisor and mortgage specialist.</td><td class="border"></td></tr>
-                                <tr><td class="border p-2"><strong>Completion:</strong> Estimated timeline for build completion and handover.</td><td class="border"></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            <table class="w-full text-xs border-collapse border border-gray-300">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-gray-300 p-2 text-left">Document / Information Provided</th>
+                                        <th class="border border-gray-300 p-2 w-20 text-center">Initials</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border p-2"><strong>Reservation Agreement:</strong> Full terms, conditions, and expiry date explained.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Property Details:</strong> Site plan, plot boundary, and internal layout/floor plans.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Specification:</strong> List of fixtures, fittings, and contents included in the price.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Tenure & Costs:</strong> Tenure type (Freehold/Leasehold) and estimated management fees.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Warranty:</strong> Details of the Warranty Provider and scope of cover.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Health & Safety:</strong> Site safety rules and requirements for visiting the development.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Cancellation Rights:</strong> Explanation of the cooling-off period and retention costs.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Complaints Procedure:</strong> Copy of the Builder's/Agent's process for handling complaints.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Professional Advice:</strong> Recommendation to appoint a legal advisor and mortgage specialist.</td><td class="border"></td></tr>
+                                    <tr><td class="border p-2"><strong>Completion:</strong> Estimated timeline for build completion and handover.</td><td class="border"></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <!-- NEW IMPORTANT NOTES SECTION -->
-                    <div class="mt-8 mb-6 text-[10px] leading-tight text-justify">
-                        <h2 class="text-sm font-bold border-b border-gray-400 mb-2 uppercase">8. Important Notes</h2>
-                        <p class="mb-1">Before agreeing this Reservation Agreement you have been provided with those documents listed in the Reservation Checklist and you have reviewed the documents shown and information provided. By agreeing this Reservation Agreement, you confirm as follows:</p>
-                        <ol class="list-decimal pl-4 space-y-1">
-                            <li>The Reservation Guide accurately sets out the information provided to you by or on behalf of <span class="vendorName-text font-bold">[Vendor Name]</span> in respect of the Plot up to the point of Reservation.</li>
-                            <li>That you have been provided with the documents listed or shown as having been provided or shown to you and that the amendments to the documents provided in relation to the Plot have been explained to you with all information you have requested in relation to these amendments having been provided to you.</li>
-                            <li>That the reservation period is as recorded on the Reservation Agreement and that it may only be extended by mutual agreement. On expiry or at any time after that the agreement lapses we may, without notice to you, agree to sell the Plot to a third party and other than to refund the portion of Reservation Deposit on expiry we have no other obligation to you in relation to the Plot.</li>
-                            <li>In respect of the documents and the plan provided:
-                                <ul class="list-none pl-2 mt-1 space-y-1">
-                                    <li><strong>4.1</strong> The Development Brochure shows the layout of the development and specifically that it records areas of open space, location of private and roads which will be adopted, the location of any SUDS or similar drainage scheme, the location of any play area and the location of affordable housing designated by the planning consent for the development. You also acknowledge that the location of each of above may alter during the course of development but details of any alteration will be made available to you by information provided to your solicitor.</li>
-                                    <li><strong>4.2</strong> The House Type Brochure together with any amendments to this relevant to your Plot has been provided and that this shows the approximate room dimensions, layout of the kitchen and bathroom and a description of the elevations of the Plot. Again you acknowledge that some minor changes to this during the course of construction may be made and will be notified to you either via your solicitors or by site.</li>
-                                    <li><strong>4.3</strong> A detailed plan of the area of development on which your Plot is situated has been provided and you have had explained to you the detail of the area immediately surrounding your Plot and in particular: The approximate dimensions of your plot (the plan being to scale), the type of wall or fence surrounding your plot (if any), the nature and location of any access arrangements to your Plot and any parking space belonging to it. Levels and landscaping arrangements in place for your garden and the actual plot area being conveyed to you.</li>
-                                    <li><strong>4.4 (Apartment Only)</strong> The communal areas consisting of hallways, stairwells, lifts, access points and rights of way together with any communal facilities such as a gym.</li>
-                                    <li><strong>4.5</strong> The basic specification of the Plot with any alteration agreed at this stage being recorded on the reservation agreement.</li>
-                                    <li><strong>4.6</strong> Where the Plot differs from the above information in appearance or content this is reflected in the documents and drawings shown to you as recorded on the Checklist.</li>
-                                </ul>
-                            </li>
-                            <li>If you have visited a show home on this or any other development you recognise that the show home will have within it a number of additional items and extras which are not part of the basic specification and therefore will not be provided for your Plot. They may not all be available but if they are then they may be ordered specifically from our Choices range. Your Plot, including the garden, may differ in terms of its appearance or layout from that within the show home in accordance with the House Type Brochure as amended and/or as explained and recorded on the Reservation Agreement.</li>
-                            <li>You also confirm having been provided with the Information Sheet and Affordability Statement, the issue number of which is recorded in the Reservation Agreement which provides details of those services to be provided to your Plot for which payment is due from you, together with our current estimate of the sum which will be due from you by way of service charge for these and costs you may incur to us during the conveyancing process. In addition if the development is served by a district heating centre you confirm that it has been explained to you that you are required to obtain heat and hot water from this, the approximate cost of which is also provided within the information sheet and that you may be required to enter into an agreement direct with the operator of this district heating centre to obtain and pay for heat and hot water which will be provided to your Plot.</li>
-                            <li>You also confirm that the Information Sheet sets out the details of the type of ownership applicable to your Plot in terms of whether it is freehold or leasehold and details of any ground rent and other costs which may be payable under the Lease.</li>
-                            <li>For the avoidance of doubt minor amendments may be made to the design, construction or materials of the Plot, the development and any programme for construction may also be altered. You may be informed of any such changes following reservation and prior to exchange of contract and you shall be deemed to have reserved on the basis of such amended information. Any such changes following exchange of contracts may be permitted in accordance with the terms of the contract by which you are purchasing the property.</li>
-                            <li>You have agreed to our use of personal information including financial information you provide for the purposes set out in the Reservation Agreement which will include assisting in progressing the sale to you of your property, supplying services to or for it, and for use by us and third parties in improving marketing of our products and services.</li>
-                            <li>In addition to sales of homes to individual customers we also work with different partners to offer other means of home ownership across our developments including but not limited to sales of housing (including apartments) to local authorities and housing associations to be used as affordable housing (in addition to the affordable housing requirements under the planning permission for the development), home ownership schemes such as Rent then Buy or shared ownership arrangements and sales to investors.</li>
-                        </ol>
-                    </div>
-
-                     <!-- Footer Logo Page 3 -->
-                    <div class="absolute bottom-8 left-0 w-full flex justify-center items-center opacity-70">
-                         <img src="Arlington-large.jpg" class="h-8" alt="Arlington Park">
-                    </div>
-
-                    <!-- Lower Left Logo Page 3 -->
-                    <div class="absolute bottom-8 left-8 flex justify-start items-center">
-                         <img src="DYNAMIK.png" class="h-10 object-contain" alt="Dynamik Construction">
-                    </div>
-                    
-                    <!-- Lower Right Logo Page 3 -->
-                    <div class="absolute bottom-8 right-8 flex justify-end items-center">
-                         <img src="Propertymark%20CMP%20logo%20(White)%20(small%20use%20variant).png" class="h-10 object-contain" alt="Propertymark CMP">
+                        <!-- NEW IMPORTANT NOTES SECTION -->
+                        <div class="mt-8 mb-6 text-[10px] leading-tight text-justify">
+                            <h2 class="text-sm font-bold border-b border-gray-400 mb-2 uppercase">8. Important Notes</h2>
+                            <p class="mb-1">Before agreeing this Reservation Agreement you have been provided with those documents listed in the Reservation Checklist and you have reviewed the documents shown and information provided. By agreeing this Reservation Agreement, you confirm as follows:</p>
+                            <ol class="list-decimal pl-4 space-y-1">
+                                <li>The Reservation Guide accurately sets out the information provided to you by or on behalf of <span class="vendorName-text font-bold">[Vendor Name]</span> in respect of the Plot up to the point of Reservation.</li>
+                                <li>That you have been provided with the documents listed or shown as having been provided or shown to you and that the amendments to the documents provided in relation to the Plot have been explained to you with all information you have requested in relation to these amendments having been provided to you.</li>
+                                <li>That the reservation period is as recorded on the Reservation Agreement and that it may only be extended by mutual agreement. On expiry or at any time after that the agreement lapses we may, without notice to you, agree to sell the Plot to a third party and other than to refund the portion of Reservation Deposit on expiry we have no other obligation to you in relation to the Plot.</li>
+                                <li>In respect of the documents and the plan provided:
+                                    <ul class="list-none pl-2 mt-1 space-y-1">
+                                        <li><strong>4.1</strong> The Development Brochure shows the layout of the development and specifically that it records areas of open space, location of private and roads which will be adopted, the location of any SUDS or similar drainage scheme, the location of any play area and the location of affordable housing designated by the planning consent for the development. You also acknowledge that the location of each of above may alter during the course of development but details of any alteration will be made available to you by information provided to your solicitor.</li>
+                                        <li><strong>4.2</strong> The House Type Brochure together with any amendments to this relevant to your Plot has been provided and that this shows the approximate room dimensions, layout of the kitchen and bathroom and a description of the elevations of the Plot. Again you acknowledge that some minor changes to this during the course of construction may be made and will be notified to you either via your solicitors or by site.</li>
+                                        <li><strong>4.3</strong> A detailed plan of the area of development on which your Plot is situated has been provided and you have had explained to you the detail of the area immediately surrounding your Plot and in particular: The approximate dimensions of your plot (the plan being to scale), the type of wall or fence surrounding your plot (if any), the nature and location of any access arrangements to your Plot and any parking space belonging to it. Levels and landscaping arrangements in place for your garden and the actual plot area being conveyed to you.</li>
+                                        <li><strong>4.4 (Apartment Only)</strong> The communal areas consisting of hallways, stairwells, lifts, access points and rights of way together with any communal facilities such as a gym.</li>
+                                        <li><strong>4.5</strong> The basic specification of the Plot with any alteration agreed at this stage being recorded on the reservation agreement.</li>
+                                        <li><strong>4.6</strong> Where the Plot differs from the above information in appearance or content this is reflected in the documents and drawings shown to you as recorded on the Checklist.</li>
+                                    </ul>
+                                </li>
+                                <li>If you have visited a show home on this or any other development you recognise that the show home will have within it a number of additional items and extras which are not part of the basic specification and therefore will not be provided for your Plot. They may not all be available but if they are then they may be ordered specifically from our Choices range. Your Plot, including the garden, may differ in terms of its appearance or layout from that within the show home in accordance with the House Type Brochure as amended and/or as explained and recorded on the Reservation Agreement.</li>
+                                <li>You also confirm having been provided with the Information Sheet and Affordability Statement, the issue number of which is recorded in the Reservation Agreement which provides details of those services to be provided to your Plot for which payment is due from you, together with our current estimate of the sum which will be due from you by way of service charge for these and costs you may incur to us during the conveyancing process. In addition if the development is served by a district heating centre you confirm that it has been explained to you that you are required to obtain heat and hot water from this, the approximate cost of which is also provided within the information sheet and that you may be required to enter into an agreement direct with the operator of this district heating centre to obtain and pay for heat and hot water which will be provided to your Plot.</li>
+                                <li>You also confirm that the Information Sheet sets out the details of the type of ownership applicable to your Plot in terms of whether it is freehold or leasehold and details of any ground rent and other costs which may be payable under the Lease.</li>
+                                <li>For the avoidance of doubt minor amendments may be made to the design, construction or materials of the Plot, the development and any programme for construction may also be altered. You may be informed of any such changes following reservation and prior to exchange of contract and you shall be deemed to have reserved on the basis of such amended information. Any such changes following exchange of contracts may be permitted in accordance with the terms of the contract by which you are purchasing the property.</li>
+                                <li>You have agreed to our use of personal information including financial information you provide for the purposes set out in the Reservation Agreement which will include assisting in progressing the sale to you of your property, supplying services to or for it, and for use by us and third parties in improving marketing of our products and services.</li>
+                                <li>In addition to sales of homes to individual customers we also work with different partners to offer other means of home ownership across our developments including but not limited to sales of housing (including apartments) to local authorities and housing associations to be used as affordable housing (in addition to the affordable housing requirements under the planning permission for the development), home ownership schemes such as Rent then Buy or shared ownership arrangements and sales to investors.</li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
 
