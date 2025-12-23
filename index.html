@@ -57,19 +57,50 @@
             .no-print {
                 display: none !important;
             }
+            
+            /* RESET LAYOUT FOR PRINT TO FIX PAGINATION */
+            body, html {
+                height: auto !important;
+                overflow: visible !important;
+            }
+            
+            /* Override Tailwind layout classes that clip content */
+            .h-screen {
+                height: auto !important;
+            }
+            .overflow-hidden, .overflow-y-auto {
+                overflow: visible !important;
+                height: auto !important;
+            }
+            
+            /* Reset Main Container */
+            main {
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+                width: 100% !important;
+            }
+
             .a4-page {
                 width: 100%;
                 margin: 0;
                 padding: 0;
                 box-shadow: none;
                 border: none;
-                min-height: 297mm; /* Enforce height for footer placement */
-                height: 297mm;
+                min-height: 297mm; 
+                height: 297mm; /* Keep fixed height to ensure footer stays at bottom */
                 position: relative;
+                page-break-after: always;
             }
+            
+            .a4-page:last-child {
+                page-break-after: auto;
+            }
+
             .page-break {
                 page-break-before: always;
             }
+            
             /* Hide placeholder styling in print if image is missing, just show empty */
             .img-placeholder {
                 border: none;
@@ -177,7 +208,7 @@
                     <input type="text" data-bind="leaseTerms" placeholder="Lease Terms (Years/Start Date)" class="w-full border rounded p-2 text-sm">
                     <input type="text" data-bind="mgmtFee" placeholder="Est. Mgmt Fee (£)" class="w-full border rounded p-2 text-sm">
                     <div class="flex gap-2">
-                        <input type="text" data-bind="retentionMin" placeholder="Retain Min (£)" class="w-1/2 border rounded p-2 text-sm" value="500">
+                        <input type="text" data-bind="retentionMin" placeholder="Retain Min (£)" class="w-1/2 border rounded p-2 text-sm" value="50">
                         <input type="text" data-bind="retentionMax" placeholder="Retain Max (£)" class="w-1/2 border rounded p-2 text-sm" value="1500">
                     </div>
                 </div>
@@ -466,14 +497,7 @@
                                 <ul class="list-disc pl-4 mt-1">
                                     <li><strong>14-Day Cooling-Off Period:</strong> If you cancel within 14 days of reservation, you receive a full refund.</li>
                                     <li><strong>Major Changes:</strong> If we notify you of a Major Change that is unacceptable to you, you may cancel within 14 days of that notification and receive a full refund.</li>
-                                    <li><strong>After the Cooling-Off Period:</strong> If you cancel after 14 days (and not due to a Major Change), we will refund your deposit minus the following reasonable costs:
-                                        <ul class="list-none pl-2 mt-1 italic">
-                                            <li>- £50: Administration and management contribution.</li>
-                                            <li>- Up to £100: Legal costs (if solicitors were instructed).</li>
-                                            <li>- Up to £250: Legal costs for part exchange (if the process had started).</li>
-                                            <li>- £100: Contribution towards the Energy Performance Certificate (if commissioned).</li>
-                                        </ul>
-                                    </li>
+                                    <li><strong>After the Cooling-Off Period:</strong> If you cancel after 14 days (and not due to a Major Change), we will refund your deposit minus reasonable administrative and other costs incurred in processing and holding the reservation. The deduction will be between £<span class="retentionMin-text font-bold">...</span> and £<span class="retentionMax-text font-bold">...</span> depending on the level of work completed and costs incurred (e.g., legal fees, administrative management, part exchange setup).</li>
                                 </ul>
                             </p>
                             
