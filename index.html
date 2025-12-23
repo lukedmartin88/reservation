@@ -23,6 +23,7 @@
             background: white;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             color: black;
+            position: relative; /* Ensure absolute positioning works for footer */
         }
 
         /* Print Styles - Critical for PDF Generation */
@@ -39,6 +40,9 @@
                 padding: 0;
                 box-shadow: none;
                 border: none;
+                min-height: 297mm; /* Enforce height for footer placement */
+                height: 297mm;
+                position: relative;
             }
             .page-break {
                 page-break-before: always;
@@ -368,6 +372,11 @@
                             </div>
                         </div>
                     </div>
+                    
+                     <!-- Footer Logo Page 1 -->
+                    <div class="absolute bottom-8 left-0 w-full flex justify-center items-center opacity-70">
+                         <img src="Arlington-large.jpg" class="h-8" onerror="this.style.display='none'">
+                    </div>
                 </div>
                 
                 <div class="h-8 print:hidden"></div> <!-- Spacer for screen -->
@@ -491,6 +500,11 @@
                                 <tr><td class="border p-2">3.1</td><td class="border p-2">Advice of Buyer's termination rights</td><td class="border"></td></tr>
                             </tbody>
                         </table>
+                    </div>
+                    
+                     <!-- Footer Logo Page 2 -->
+                    <div class="absolute bottom-8 left-0 w-full flex justify-center items-center opacity-70">
+                         <img src="Arlington-large.jpg" class="h-8" onerror="this.style.display='none'">
                     </div>
                 </div>
 
