@@ -24,6 +24,30 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             color: black;
             position: relative;
+            margin-bottom: 2rem;
+        }
+
+        /* Image Placeholder Styles */
+        .img-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            border: 2px dashed #d1d5db;
+            color: #6b7280;
+            font-size: 0.6rem;
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .img-placeholder:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .hidden-input {
+            display: none;
         }
 
         /* Print Styles - Critical for PDF Generation */
@@ -65,7 +89,8 @@
                 box-shadow: none;
                 border: none;
                 min-height: 297mm; 
-                height: 297mm;
+                height: auto !important; /* ALLOW GROWTH to prevent cutting off signatures */
+                overflow: visible !important;
                 position: relative;
                 page-break-after: always;
             }
@@ -462,58 +487,6 @@
                             <p><strong>10. Data Protection:</strong> The Buyer consents to the Reservation Agreement information being used by the Vendor and Selling Agent to progress the purchase, and for use in customer surveys. All such information will be applied in accordance with the Data Protection Act 2018.</p>
                         </div>
                     </div>
-
-                    <!-- NEW CONFIRMATION TEXT -->
-                    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 text-justify text-xs">
-                        <p class="mb-2"><strong>By signing this document and initialling the attachments, both the Home Buyer and Home Builder confirm that the information provided here accurately describes the property. This document replaces any previous conversations, brochures or written descriptions.</strong></p>
-                        <p class="mb-2">Our goal is to ensure the Buyer has a clear understanding of the property and a written record of the Builder's commitments. If there are any concerns about the property description, please write them in the space below so the Builder can clarify them. This must be done no later than when contracts are exchanged.</p>
-                        
-                        <div class="mt-4">
-                            <p class="font-bold underline mb-1">Notes:</p>
-                            <div class="border border-gray-400 bg-white p-2 h-24"></div>
-                        </div>
-                    </div>
-
-                    <!-- 7. Declarations -->
-                    <div class="mb-8 bg-gray-50 border border-gray-200 p-4">
-                        <h2 class="text-base font-bold uppercase mb-2">7. Declarations</h2>
-                        <ul class="list-disc pl-5 space-y-1 mb-6">
-                            <li>We have read, understood, and accept the conditions detailed on this Reservation Agreement.</li>
-                            <li>We have received/read the information and details listed in the Summary Checklist attached at Appendix 1.</li>
-                        </ul>
-
-                        <div class="grid grid-cols-2 gap-10 mt-8">
-                            <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Signed (Buyer 1)</p>
-                            </div>
-                            <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Date</p>
-                            </div>
-                            <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Signed (Buyer 2)</p>
-                            </div>
-                            <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Date</p>
-                            </div>
-                             <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Signed (Vendor / Agent Rep)</p>
-                            </div>
-                            <div>
-                                <div class="border-b border-black h-8 mb-1"></div>
-                                <p class="text-xs font-bold uppercase">Date</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Obvious Warning Box -->
-                    <div class="mt-6 border-2 border-black bg-gray-50 p-4 text-center">
-                        <p class="font-bold text-sm uppercase">This is a legal agreement; if in any doubt as to its meaning or effect, the buyer should seek legal advice before signing it.</p>
-                    </div>
                 </div>
 
                 <div class="h-8 print:hidden"></div> <!-- Spacer for screen -->
@@ -521,7 +494,59 @@
                 <!-- PAGE 3 (Force break in print) -->
                 <div class="a4-page document-font relative text-sm leading-relaxed page-break">
                     
-                    <div class="pt-6"> <!-- Added padding top since header was removed -->
+                    <div class="pt-6">
+                        <!-- NEW CONFIRMATION TEXT -->
+                        <div class="mb-6 p-4 bg-blue-50 border border-blue-200 text-justify text-xs">
+                            <p class="mb-2"><strong>By signing this document and initialling the attachments, both the Home Buyer and Home Builder confirm that the information provided here accurately describes the property. This document replaces any previous conversations, brochures or written descriptions.</strong></p>
+                            <p class="mb-2">Our goal is to ensure the Buyer has a clear understanding of the property and a written record of the Builder's commitments. If there are any concerns about the property description, please write them in the space below so the Builder can clarify them. This must be done no later than when contracts are exchanged.</p>
+                            
+                            <div class="mt-4">
+                                <p class="font-bold underline mb-1">Notes:</p>
+                                <div class="border border-gray-400 bg-white p-2 h-24"></div>
+                            </div>
+                        </div>
+
+                        <!-- 7. Declarations -->
+                        <div class="mb-8 bg-gray-50 border border-gray-200 p-4">
+                            <h2 class="text-base font-bold uppercase mb-2">7. Declarations</h2>
+                            <ul class="list-disc pl-5 space-y-1 mb-6">
+                                <li>We have read, understood, and accept the conditions detailed on this Reservation Agreement.</li>
+                                <li>We have received/read the information and details listed in the Summary Checklist attached at Appendix 1.</li>
+                            </ul>
+
+                            <div class="grid grid-cols-2 gap-10 mt-8">
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Signed (Buyer 1)</p>
+                                </div>
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Date</p>
+                                </div>
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Signed (Buyer 2)</p>
+                                </div>
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Date</p>
+                                </div>
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Signed (Vendor / Agent Rep)</p>
+                                </div>
+                                <div>
+                                    <div class="border-b border-black h-8 mb-1"></div>
+                                    <p class="text-xs font-bold uppercase">Date</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Obvious Warning Box -->
+                        <div class="mt-6 border-2 border-black bg-gray-50 p-4 text-center mb-8">
+                            <p class="font-bold text-sm uppercase">This is a legal agreement; if in any doubt as to its meaning or effect, the buyer should seek legal advice before signing it.</p>
+                        </div>
+
                         <div class="border-t-2 border-black pt-4">
                             <h2 class="text-base font-bold uppercase mb-4">Appendix 1: Information Pack Summary Checklist</h2>
                             <p class="mb-4"><strong>Development:</strong> <span class="devName-text">[Name]</span> | <strong>Plot:</strong> <span class="plotNo-text">[No]</span></p>
@@ -549,7 +574,15 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
 
+                <div class="h-8 print:hidden"></div>
+
+                <!-- PAGE 4 (Force break in print) -->
+                <div class="a4-page document-font relative text-sm leading-relaxed page-break">
+                    
+                    <div class="pt-6">
                         <!-- NEW IMPORTANT NOTES SECTION -->
                         <div class="mt-8 mb-6 text-[10px] leading-tight text-justify">
                             <h2 class="text-sm font-bold border-b border-gray-400 mb-2 uppercase">8. Important Notes</h2>
